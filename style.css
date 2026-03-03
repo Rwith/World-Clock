@@ -1,0 +1,299 @@
+/* ===== Reset & Base ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #21262d;
+  --border: #30363d;
+  --accent: #58a6ff;
+  --accent2: #3fb950;
+  --text: #e6edf3;
+  --text-muted: #7d8590;
+  --cube-face: #1c2333;
+  --cube-border: #58a6ff;
+  --shadow: rgba(0,0,0,0.5);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ===== Header ===== */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+#local-time {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+
+#local-city {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+#local-clock {
+  font-size: 1.8rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent2);
+  line-height: 1;
+}
+
+#local-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+/* ===== Main Area ===== */
+#app { display: flex; flex-direction: column; height: 100vh; }
+
+#main-area {
+  display: flex;
+  flex: 0 0 auto;
+  height: 340px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ===== World Map ===== */
+#map-container {
+  flex: 1;
+  position: relative;
+  background: radial-gradient(ellipse at center, #0d1f35 0%, #0a1628 100%);
+  overflow: hidden;
+}
+
+#world-map {
+  width: 100%;
+  height: 100%;
+}
+
+.continent {
+  fill: #1a3a5c;
+  stroke: #2d5a8e;
+  stroke-width: 1;
+  filter: drop-shadow(0 0 4px rgba(88,166,255,0.2));
+}
+
+/* City dots on map */
+.city-dot {
+  fill: var(--accent);
+  cursor: grab;
+  transition: r 0.15s;
+  filter: drop-shadow(0 0 4px var(--accent));
+}
+.city-dot:hover { r: 7; fill: var(--accent2); }
+.city-dot.dragging { r: 9; cursor: grabbing; }
+
+.city-label-map {
+  fill: var(--text);
+  font-size: 10px;
+  font-family: 'Segoe UI', sans-serif;
+  pointer-events: none;
+  text-shadow: 0 0 4px #000;
+}
+
+/* Drop zone */
+#drop-zone {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  width: 130px;
+  height: 70px;
+  border: 2px dashed var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(22, 27, 34, 0.6);
+  transition: border-color 0.2s, background 0.2s;
+  pointer-events: none;
+}
+
+#drop-zone.drag-over {
+  border-color: var(--accent);
+  background: rgba(88, 166, 255, 0.1);
+}
+
+#drop-hint {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* ===== City List Panel ===== */
+#city-list-panel {
+  width: 240px;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#city-list-panel h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+#city-list {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#city-list::-webkit-scrollbar { width: 4px; }
+#city-list::-webkit-scrollbar-track { background: transparent; }
+#city-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.city-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  cursor: grab;
+  user-select: none;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.city-card:hover {
+  border-color: var(--accent);
+  background: #1c2333;
+}
+
+.city-card:active { cursor: grabbing; transform: scale(0.97); }
+
+.city-card.dragging-card {
+  opacity: 0.4;
+  border-color: var(--accent);
+}
+
+.city-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.city-time {
+  font-size: 1rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent2);
+  white-space: nowrap;
+}
+
+.city-tz {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ===== Drag Ghost ===== */
+#drag-ghost {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  background: var(--surface2);
+  border: 1.5px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+  box-shadow: 0 8px 32px rgba(88,166,255,0.3);
+  opacity: 0;
+  transition: opacity 0.1s;
+  white-space: nowrap;
+}
+
+#drag-ghost.visible { opacity: 1; }
+
+/* ===== 3D Cubes Canvas ===== */
+#cubes-area {
+  flex: 1;
+  position: relative;
+  background: var(--bg);
+  overflow: hidden;
+}
+
+#three-canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* ===== Tooltip ===== */
+#cube-tooltip {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 0.75rem;
+  color: var(--text);
+  pointer-events: none;
+  z-index: 100;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+#cube-tooltip.visible { opacity: 1; }
+
+/* ===== Remove button ===== */
+.remove-btn {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #da3633;
+  border: none;
+  color: #fff;
+  font-size: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s;
+  z-index: 5;
+}

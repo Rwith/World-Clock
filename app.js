@@ -342,13 +342,24 @@ function onDragEnd(e) {
   dragState.card.classList.remove('dragging');
 
   if (dragState.moved) {
-    // If dropped outside the city panel → create floating clock
-    const panel = document.getElementById('city-panel');
-    const r = panel.getBoundingClientRect();
-    const inPanel = e.clientX >= r.left && e.clientX <= r.right &&
-                    e.clientY >= r.top  && e.clientY <= r.bottom;
-    if (!inPanel) {
-      spawnFloatingClock(dragState.city, e.clientX - 77, e.clientY - 45);
+    if (window.electronAPI) {
+      // Electron: spawn a real frameless always-on-top OS window
+      // e.screenX/Y gives absolute screen coordinates
+      window.electronAPI.spawnClock(
+        dragState.city.name,
+        dragState.city.tz,
+        e.screenX - 90,
+        e.screenY - 55
+      );
+    } else {
+      // Browser fallback: HTML floating div (only if dropped outside panel)
+      const panel = document.getElementById('city-panel');
+      const r = panel.getBoundingClientRect();
+      const inPanel = e.clientX >= r.left && e.clientX <= r.right &&
+                      e.clientY >= r.top  && e.clientY <= r.bottom;
+      if (!inPanel) {
+        spawnFloatingClock(dragState.city, e.clientX - 77, e.clientY - 45);
+      }
     }
   }
 

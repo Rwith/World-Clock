@@ -71,14 +71,14 @@ function initLocalClock() {
     cityEl.textContent = tz.split('/').pop().replace(/_/g, ' ');
   } catch (_) {}
 
-  function tick() {
+  // Exposed so the shared ticker can update this element
+  window._tickLocalClock = () => {
     clockEl.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
     dateEl.textContent  = new Date().toLocaleDateString('en-US', {
       weekday: 'short', month: 'short', day: 'numeric'
     });
-  }
-  tick();
-  setInterval(tick, 1000);
+  };
+  window._tickLocalClock();
 }
 
 // ─── Day/Night Terminator (ported from joergdietrich/Leaflet.Terminator) ──────
@@ -316,18 +316,32 @@ function removeCityCard(cityName, card, city) {
   city._cardDateEl = null;
 }
 
-// ─── City / Floating Clock Ticker ────────────────────────────────────────────
+// ─── Shared Ticker — snaps to the next wall-clock second boundary ────────────
+// All clocks (header, cards, browser floating divs) update in the same frame.
 function startTicker() {
-  setInterval(() => {
+  function tick() {
+    // Local clock in header
+    if (window._tickLocalClock) window._tickLocalClock();
+
+    // City panel cards
     CITIES.forEach(city => {
       if (city._cardTimeEl) city._cardTimeEl.textContent = getTime(city.tz);
       if (city._cardDateEl) city._cardDateEl.textContent = getDate(city.tz);
     });
+
+    // Browser-mode floating divs
     floatingClocks.forEach(fc => {
       fc.timeEl.textContent = getTime(fc.city.tz);
       fc.dateEl.textContent = getDate(fc.city.tz);
     });
-  }, 1000);
+  }
+
+  // Wait until the next exact second boundary, then tick every 1000 ms
+  const msUntilNextSecond = 1000 - (Date.now() % 1000);
+  setTimeout(() => {
+    tick();
+    setInterval(tick, 1000);
+  }, msUntilNextSecond);
 }
 
 // ─── Drag: card → floating clock ──────────────────────────────────────────────

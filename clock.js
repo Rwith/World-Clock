@@ -30,8 +30,14 @@ function tick() {
     });
 }
 
+// Snap to the next wall-clock second so this window ticks in sync
+// with the main window and all other clock widgets
 tick();
-setInterval(tick, 1000);
+const msUntilNextSecond = 1000 - (Date.now() % 1000);
+setTimeout(() => {
+  tick();
+  setInterval(tick, 1000);
+}, msUntilNextSecond);
 
 // Close button
 document.getElementById('wg-close').addEventListener('click', () => {

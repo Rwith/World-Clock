@@ -4,62 +4,38 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>World Clock</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="app">
-    <header>
-      <h1>World Clock</h1>
-      <div id="local-time">
-        <span id="local-city">Your Location</span>
-        <span id="local-clock">--:--:--</span>
-        <span id="local-date">---</span>
-      </div>
-    </header>
-
-    <div id="main-area">
-      <!-- World Map -->
-      <div id="map-container">
-        <svg id="world-map" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
-          <!-- Simplified world map paths -->
-          <!-- North America -->
-          <path class="continent" d="M 120 80 L 240 60 L 280 90 L 300 130 L 280 180 L 250 200 L 200 210 L 160 190 L 130 160 L 110 130 Z" />
-          <!-- South America -->
-          <path class="continent" d="M 210 230 L 260 220 L 280 250 L 270 320 L 240 370 L 210 380 L 190 350 L 185 290 L 195 250 Z" />
-          <!-- Europe -->
-          <path class="continent" d="M 440 60 L 510 55 L 530 80 L 520 110 L 490 120 L 460 115 L 440 95 Z" />
-          <!-- Africa -->
-          <path class="continent" d="M 450 130 L 520 120 L 540 150 L 545 220 L 530 290 L 500 330 L 470 320 L 450 270 L 440 200 L 445 150 Z" />
-          <!-- Asia -->
-          <path class="continent" d="M 530 55 L 700 50 L 780 70 L 800 110 L 760 150 L 700 170 L 640 160 L 580 140 L 540 120 L 525 85 Z" />
-          <!-- Australia -->
-          <path class="continent" d="M 720 270 L 800 260 L 840 290 L 835 340 L 800 360 L 755 350 L 725 320 L 715 290 Z" />
-          <!-- Greenland -->
-          <path class="continent" d="M 310 30 L 370 20 L 390 50 L 370 80 L 340 85 L 310 65 Z" />
-
-          <!-- City dots will be rendered here by JS -->
-          <g id="city-dots"></g>
-        </svg>
-
-        <div id="drop-zone" title="Drag a city here to place a clock cube">
-          <div id="drop-hint">Drag a city here</div>
-        </div>
-      </div>
-
-      <!-- City Clock List -->
-      <div id="city-list-panel">
-        <h2>Cities</h2>
-        <div id="city-list"></div>
-      </div>
+  <header>
+    <h1>&#127758; World Clock</h1>
+    <div id="local-time">
+      <span id="local-city">Your Location</span>
+      <span id="local-clock">--:--:--</span>
+      <span id="local-date">---</span>
     </div>
+  </header>
 
-    <!-- 3D Clock Cubes Area -->
-    <div id="cubes-area">
-      <canvas id="three-canvas"></canvas>
+  <div id="map"></div>
+
+  <div id="city-panel">
+    <div id="city-panel-header">
+      <span class="panel-label">City Times</span>
+      <div id="city-add-controls">
+        <select id="city-select">
+          <option value="">&#8212; Add a city &#8212;</option>
+        </select>
+        <button id="add-city-btn">+ Add</button>
+      </div>
+      <span id="drag-hint">&#8689; Drag any card to create a floating desktop clock</span>
     </div>
+    <div id="city-cards"></div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <div id="floating-clocks"></div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

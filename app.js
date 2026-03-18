@@ -1,30 +1,49 @@
 'use strict';
 
-// ─── City Data ───────────────────────────────────────────────────────────────
+// ─── City Data (name, IANA timezone, lat/lng) ─────────────────────────────────
 const CITIES = [
-  { name: 'New York',   tz: 'America/New_York',    mx: 198, my: 155 },
-  { name: 'Los Angeles',tz: 'America/Los_Angeles',  mx: 140, my: 148 },
-  { name: 'Chicago',    tz: 'America/Chicago',      mx: 185, my: 140 },
-  { name: 'London',     tz: 'Europe/London',        mx: 458, my: 85  },
-  { name: 'Paris',      tz: 'Europe/Paris',         mx: 475, my: 90  },
-  { name: 'Berlin',     tz: 'Europe/Berlin',        mx: 492, my: 83  },
-  { name: 'Dubai',      tz: 'Asia/Dubai',           mx: 580, my: 140 },
-  { name: 'Mumbai',     tz: 'Asia/Kolkata',         mx: 605, my: 165 },
-  { name: 'Singapore',  tz: 'Asia/Singapore',       mx: 680, my: 220 },
-  { name: 'Tokyo',      tz: 'Asia/Tokyo',           mx: 745, my: 115 },
-  { name: 'Sydney',     tz: 'Australia/Sydney',     mx: 800, my: 305 },
-  { name: 'São Paulo',  tz: 'America/Sao_Paulo',    mx: 245, my: 295 },
-  { name: 'Cairo',      tz: 'Africa/Cairo',         mx: 510, my: 148 },
-  { name: 'Lagos',      tz: 'Africa/Lagos',         mx: 462, my: 220 },
-  { name: 'Moscow',     tz: 'Europe/Moscow',        mx: 540, my: 75  },
-  { name: 'Seoul',      tz: 'Asia/Seoul',           mx: 740, my: 105 },
+  { name: 'New York',      tz: 'America/New_York',                   lat: 40.71,  lng: -74.01  },
+  { name: 'Los Angeles',   tz: 'America/Los_Angeles',                lat: 34.05,  lng: -118.24 },
+  { name: 'Chicago',       tz: 'America/Chicago',                    lat: 41.88,  lng: -87.63  },
+  { name: 'Toronto',       tz: 'America/Toronto',                    lat: 43.65,  lng: -79.38  },
+  { name: 'Mexico City',   tz: 'America/Mexico_City',                lat: 19.43,  lng: -99.13  },
+  { name: 'São Paulo',     tz: 'America/Sao_Paulo',                  lat: -23.55, lng: -46.63  },
+  { name: 'Buenos Aires',  tz: 'America/Argentina/Buenos_Aires',     lat: -34.61, lng: -58.38  },
+  { name: 'London',        tz: 'Europe/London',                      lat: 51.51,  lng: -0.13   },
+  { name: 'Paris',         tz: 'Europe/Paris',                       lat: 48.86,  lng: 2.35    },
+  { name: 'Berlin',        tz: 'Europe/Berlin',                      lat: 52.52,  lng: 13.41   },
+  { name: 'Madrid',        tz: 'Europe/Madrid',                      lat: 40.42,  lng: -3.70   },
+  { name: 'Rome',          tz: 'Europe/Rome',                        lat: 41.90,  lng: 12.49   },
+  { name: 'Amsterdam',     tz: 'Europe/Amsterdam',                   lat: 52.37,  lng: 4.90    },
+  { name: 'Moscow',        tz: 'Europe/Moscow',                      lat: 55.75,  lng: 37.62   },
+  { name: 'Istanbul',      tz: 'Europe/Istanbul',                    lat: 41.01,  lng: 28.95   },
+  { name: 'Cairo',         tz: 'Africa/Cairo',                       lat: 30.04,  lng: 31.24   },
+  { name: 'Lagos',         tz: 'Africa/Lagos',                       lat: 6.52,   lng: 3.38    },
+  { name: 'Nairobi',       tz: 'Africa/Nairobi',                     lat: -1.29,  lng: 36.82   },
+  { name: 'Cape Town',     tz: 'Africa/Johannesburg',                lat: -33.93, lng: 18.42   },
+  { name: 'Dubai',         tz: 'Asia/Dubai',                         lat: 25.20,  lng: 55.27   },
+  { name: 'Mumbai',        tz: 'Asia/Kolkata',                       lat: 19.08,  lng: 72.88   },
+  { name: 'Delhi',         tz: 'Asia/Kolkata',                       lat: 28.61,  lng: 77.21   },
+  { name: 'Karachi',       tz: 'Asia/Karachi',                       lat: 24.86,  lng: 67.01   },
+  { name: 'Dhaka',         tz: 'Asia/Dhaka',                         lat: 23.72,  lng: 90.41   },
+  { name: 'Bangkok',       tz: 'Asia/Bangkok',                       lat: 13.75,  lng: 100.52  },
+  { name: 'Singapore',     tz: 'Asia/Singapore',                     lat: 1.35,   lng: 103.82  },
+  { name: 'Beijing',       tz: 'Asia/Shanghai',                      lat: 39.91,  lng: 116.39  },
+  { name: 'Shanghai',      tz: 'Asia/Shanghai',                      lat: 31.23,  lng: 121.47  },
+  { name: 'Hong Kong',     tz: 'Asia/Hong_Kong',                     lat: 22.32,  lng: 114.17  },
+  { name: 'Seoul',         tz: 'Asia/Seoul',                         lat: 37.57,  lng: 126.98  },
+  { name: 'Tokyo',         tz: 'Asia/Tokyo',                         lat: 35.69,  lng: 139.69  },
+  { name: 'Sydney',        tz: 'Australia/Sydney',                   lat: -33.87, lng: 151.21  },
+  { name: 'Melbourne',     tz: 'Australia/Melbourne',                lat: -37.81, lng: 144.96  },
+  { name: 'Auckland',      tz: 'Pacific/Auckland',                   lat: -36.86, lng: 174.77  },
+  { name: 'Honolulu',      tz: 'Pacific/Honolulu',                   lat: 21.31,  lng: -157.86 },
+  { name: 'Anchorage',     tz: 'America/Anchorage',                  lat: 61.22,  lng: -149.90 },
 ];
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Time Helpers ─────────────────────────────────────────────────────────────
 function getTime(tz) {
   return new Date().toLocaleTimeString('en-US', {
-    timeZone: tz,
-    hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
+    timeZone: tz, hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false
   });
 }
 
@@ -40,11 +59,11 @@ function getShortTz(tz) {
   }).split(' ').pop();
 }
 
-// ─── Local clock ─────────────────────────────────────────────────────────────
+// ─── Local Clock ──────────────────────────────────────────────────────────────
 function initLocalClock() {
-  const clockEl  = document.getElementById('local-clock');
-  const dateEl   = document.getElementById('local-date');
-  const cityEl   = document.getElementById('local-city');
+  const clockEl = document.getElementById('local-clock');
+  const dateEl  = document.getElementById('local-date');
+  const cityEl  = document.getElementById('local-city');
 
   try {
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -53,151 +72,284 @@ function initLocalClock() {
 
   function tick() {
     clockEl.textContent = new Date().toLocaleTimeString('en-US', { hour12: false });
-    dateEl.textContent  = new Date().toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    dateEl.textContent  = new Date().toLocaleDateString('en-US', {
+      weekday: 'short', month: 'short', day: 'numeric'
+    });
   }
   tick();
   setInterval(tick, 1000);
 }
 
-// ─── SVG City Dots on Map ────────────────────────────────────────────────────
-function initMapDots() {
-  const g   = document.getElementById('city-dots');
-  const map = document.getElementById('world-map');
+// ─── Day / Night Terminator ───────────────────────────────────────────────────
+// Computes the polygon of Earth's nightside using solar declination and
+// the sub-solar longitude for the given UTC time.
+function buildNightPolygon(date) {
+  const d = date || new Date();
 
-  CITIES.forEach(city => {
-    // dot
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', city.mx);
-    circle.setAttribute('cy', city.my);
-    circle.setAttribute('r',  5);
-    circle.classList.add('city-dot');
-    circle.dataset.city = city.name;
+  // Approximate solar declination (±23.45°)
+  const start     = new Date(d.getUTCFullYear(), 0, 1);
+  const dayOfYear = Math.round((d - start) / 86400000) + 1;
+  const declDeg   = 23.45 * Math.sin((2 * Math.PI / 365) * (dayOfYear - 81));
+  const decl      = declDeg * Math.PI / 180;
 
-    // label
-    const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-    text.setAttribute('x', city.mx + 7);
-    text.setAttribute('y', city.my + 4);
-    text.classList.add('city-label-map');
-    text.textContent = city.name;
+  // Sub-solar longitude: at UTC 12:00 the sun is over the 0° meridian
+  const utcH = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
+  let ssl = 180 - utcH * 15;
+  ssl = ((ssl % 360) + 360) % 360;
+  if (ssl > 180) ssl -= 360;
 
-    g.appendChild(circle);
-    g.appendChild(text);
+  // Guard against tan(decl) = 0 near equinox
+  const tanDecl = Math.abs(decl) < 1e-6
+    ? (decl >= 0 ? 1e-6 : -1e-6)
+    : Math.tan(decl);
 
-    // Dragging from map dot → cube
-    circle.addEventListener('mousedown', e => startDragFromMap(e, city));
-  });
+  // Terminator latitude for each longitude
+  const ring = [];
+  for (let lng = -180; lng <= 180; lng++) {
+    const ha  = (lng - ssl) * Math.PI / 180;
+    let lat   = Math.atan(-Math.cos(ha) / tanDecl) * 180 / Math.PI;
+    lat = Math.max(-89.9, Math.min(89.9, lat));
+    ring.push([lat, lng]);
+  }
+
+  // Close polygon at the dark pole
+  if (declDeg >= 0) {
+    // Summer in northern hemisphere → south pole is dark
+    ring.push([-90, 180], [-90, -180]);
+  } else {
+    // Winter in northern hemisphere → north pole is dark
+    ring.push([90, 180], [90, -180]);
+  }
+
+  return ring;
 }
 
-// ─── City List Panel ──────────────────────────────────────────────────────────
-function initCityList() {
-  const list = document.getElementById('city-list');
-  CITIES.forEach(city => {
-    const card = document.createElement('div');
-    card.className = 'city-card';
-    card.dataset.city = city.name;
-    card.draggable = false;
+// ─── Leaflet Map ──────────────────────────────────────────────────────────────
+let map, nightLayer;
 
-    const left  = document.createElement('div');
-    const nameEl = document.createElement('div');
-    nameEl.className = 'city-name';
-    nameEl.textContent = city.name;
-    const tzEl  = document.createElement('div');
-    tzEl.className = 'city-tz';
-    tzEl.textContent = getShortTz(city.tz);
-    left.appendChild(nameEl);
-    left.appendChild(tzEl);
-
-    const timeEl = document.createElement('div');
-    timeEl.className = 'city-time';
-    timeEl.textContent = getTime(city.tz);
-
-    // store ref so ticker can update
-    city._timeEl = timeEl;
-
-    card.appendChild(left);
-    card.appendChild(timeEl);
-    list.appendChild(card);
-
-    card.addEventListener('mousedown', e => startDragFromCard(e, city, card));
+function initMap() {
+  map = L.map('map', {
+    center: [20, 10],
+    zoom: 2,
+    minZoom: 1,
+    maxZoom: 10,
+    zoomControl: true,
+    worldCopyJump: true,
   });
-}
 
-// ─── City List Ticker ─────────────────────────────────────────────────────────
-function startCityTicker() {
+  // Dark tile layer (CartoDB Dark Matter)
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> ' +
+      '&copy; <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 19,
+  }).addTo(map);
+
+  // Night overlay polygon
+  nightLayer = L.polygon(buildNightPolygon(), {
+    fillColor: '#060e1e',
+    fillOpacity: 0.52,
+    stroke: true,
+    color: '#3a78c9',
+    weight: 1.5,
+    opacity: 0.85,
+    interactive: false,
+    smoothFactor: 3,
+  }).addTo(map);
+
+  // Refresh night overlay every 60 s
   setInterval(() => {
-    CITIES.forEach(c => {
-      if (c._timeEl) c._timeEl.textContent = getTime(c.tz);
+    nightLayer.setLatLngs(buildNightPolygon());
+  }, 60000);
+
+  addCityMarkers();
+}
+
+// ─── City Markers ─────────────────────────────────────────────────────────────
+function addCityMarkers() {
+  CITIES.forEach(city => {
+    const icon = L.divIcon({
+      className: '',
+      html: `<div class="city-marker-wrap">
+               <div class="city-dot-marker"></div>
+               <div class="city-label-map">${city.name}</div>
+             </div>`,
+      iconSize: [8, 8],
+      iconAnchor: [4, 4],
+    });
+
+    const marker = L.marker([city.lat, city.lng], { icon })
+      .addTo(map)
+      .bindPopup(() => buildPopup(city), { maxWidth: 180 });
+
+    city._marker = marker;
+  });
+}
+
+function buildPopup(city) {
+  const div = document.createElement('div');
+  div.className = 'city-popup';
+
+  const inPanel = activeCities.has(city.name);
+  div.innerHTML = `
+    <div class="popup-name">${city.name}</div>
+    <div class="popup-time" id="ptime-${city.name.replace(/\s/g,'-')}">${getTime(city.tz)}</div>
+    <div class="popup-date">${getDate(city.tz)} · ${getShortTz(city.tz)}</div>
+    <button class="popup-add-btn${inPanel ? ' added' : ''}"
+            onclick="handlePopupAdd('${city.name}', this)">
+      ${inPanel ? '✓ Added' : '+ Add to panel'}
+    </button>
+  `;
+
+  // Tick the popup time while it's open
+  const interval = setInterval(() => {
+    const el = document.getElementById('ptime-' + city.name.replace(/\s/g,'-'));
+    if (el) el.textContent = getTime(city.tz);
+    else clearInterval(interval);
+  }, 1000);
+
+  return div;
+}
+
+window.handlePopupAdd = function(cityName, btn) {
+  addCityToPanel(cityName);
+  btn.textContent = '✓ Added';
+  btn.classList.add('added');
+};
+
+// ─── City Panel ───────────────────────────────────────────────────────────────
+const activeCities = new Set();
+
+function initCityPanel() {
+  const select = document.getElementById('city-select');
+  CITIES.forEach(city => {
+    const opt = document.createElement('option');
+    opt.value       = city.name;
+    opt.textContent = city.name;
+    select.appendChild(opt);
+  });
+
+  document.getElementById('add-city-btn').addEventListener('click', () => {
+    const val = select.value;
+    if (val) {
+      addCityToPanel(val);
+      select.value = '';
+    }
+  });
+
+  // Default cities shown on load
+  ['New York', 'London', 'Tokyo', 'Sydney'].forEach(n => addCityToPanel(n));
+}
+
+function addCityToPanel(cityName) {
+  if (activeCities.has(cityName)) return;
+  activeCities.add(cityName);
+
+  const city = CITIES.find(c => c.name === cityName);
+  if (!city) return;
+
+  const card = document.createElement('div');
+  card.className = 'city-card';
+  card.dataset.city = cityName;
+
+  card.innerHTML = `
+    <div class="card-header">
+      <span class="card-city-name">${city.name}</span>
+      <span class="card-tz">${getShortTz(city.tz)}</span>
+    </div>
+    <div class="card-time">${getTime(city.tz)}</div>
+    <div class="card-date">${getDate(city.tz)}</div>
+    <button class="card-remove" title="Remove">&#215;</button>
+    <div class="card-drag-hint">&#8689; drag to desktop</div>
+  `;
+
+  city._cardTimeEl = card.querySelector('.card-time');
+  city._cardDateEl = card.querySelector('.card-date');
+
+  card.querySelector('.card-remove').addEventListener('click', e => {
+    e.stopPropagation();
+    removeCityCard(cityName, card, city);
+  });
+
+  card.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('card-remove')) return;
+    startCardDrag(e, city, card);
+  });
+
+  document.getElementById('city-cards').appendChild(card);
+}
+
+function removeCityCard(cityName, card, city) {
+  activeCities.delete(cityName);
+  card.remove();
+  city._cardTimeEl = null;
+  city._cardDateEl = null;
+}
+
+// ─── City / Floating Clock Ticker ────────────────────────────────────────────
+function startTicker() {
+  setInterval(() => {
+    CITIES.forEach(city => {
+      if (city._cardTimeEl) city._cardTimeEl.textContent = getTime(city.tz);
+      if (city._cardDateEl) city._cardDateEl.textContent = getDate(city.tz);
+    });
+    floatingClocks.forEach(fc => {
+      fc.timeEl.textContent = getTime(fc.city.tz);
+      fc.dateEl.textContent = getDate(fc.city.tz);
     });
   }, 1000);
 }
 
-// ─── Drag System ──────────────────────────────────────────────────────────────
+// ─── Drag: card → floating clock ──────────────────────────────────────────────
 let dragState = null;
-const ghost = document.createElement('div');
-ghost.id = 'drag-ghost';
-document.body.appendChild(ghost);
 
-const dropZone    = document.getElementById('drop-zone');
-const cubesArea   = document.getElementById('cubes-area');
-const threeCanvas = document.getElementById('three-canvas');
+const dragGhost = document.createElement('div');
+dragGhost.id = 'drag-ghost';
+document.body.appendChild(dragGhost);
 
-function startDrag(e, city) {
-  dragState = { city, startX: e.clientX, startY: e.clientY };
-  ghost.textContent = city.name + '  ' + getTime(city.tz);
-  ghost.style.left  = (e.clientX + 12) + 'px';
-  ghost.style.top   = (e.clientY - 20) + 'px';
-  ghost.classList.add('visible');
+function startCardDrag(e, city, card) {
+  e.preventDefault();
+  dragState = { city, card, startX: e.clientX, startY: e.clientY, moved: false };
+
+  dragGhost.innerHTML = `
+    <div class="ghost-name">${city.name}</div>
+    <div class="ghost-time">${getTime(city.tz)}</div>
+  `;
+  dragGhost.style.left = (e.clientX + 14) + 'px';
+  dragGhost.style.top  = (e.clientY - 24) + 'px';
+  dragGhost.classList.add('visible');
+  card.classList.add('dragging');
+
   document.addEventListener('mousemove', onDragMove);
   document.addEventListener('mouseup',   onDragEnd);
 }
 
-function startDragFromMap(e, city) {
-  e.preventDefault();
-  startDrag(e, city);
-}
-
-function startDragFromCard(e, city, card) {
-  e.preventDefault();
-  card.classList.add('dragging-card');
-  dragState = { city, card };
-  startDrag(e, city);
-}
-
 function onDragMove(e) {
   if (!dragState) return;
-  ghost.style.left = (e.clientX + 12) + 'px';
-  ghost.style.top  = (e.clientY - 20) + 'px';
+  dragGhost.style.left = (e.clientX + 14) + 'px';
+  dragGhost.style.top  = (e.clientY - 24) + 'px';
 
-  // highlight cubes area when hovering over it
-  const cubesRect = cubesArea.getBoundingClientRect();
-  const inCubes = e.clientX >= cubesRect.left && e.clientX <= cubesRect.right &&
-                  e.clientY >= cubesRect.top  && e.clientY <= cubesRect.bottom;
-  cubesArea.style.outline = inCubes ? '2px solid var(--accent)' : 'none';
-
-  const dropRect = dropZone.getBoundingClientRect();
-  const inDrop = e.clientX >= dropRect.left && e.clientX <= dropRect.right &&
-                 e.clientY >= dropRect.top  && e.clientY <= dropRect.bottom;
-  dropZone.classList.toggle('drag-over', inDrop);
+  const dx = e.clientX - dragState.startX;
+  const dy = e.clientY - dragState.startY;
+  if (Math.abs(dx) > 6 || Math.abs(dy) > 6) dragState.moved = true;
 }
 
 function onDragEnd(e) {
   if (!dragState) return;
 
-  ghost.classList.remove('visible');
-  cubesArea.style.outline = 'none';
-  dropZone.classList.remove('drag-over');
+  dragGhost.classList.remove('visible');
+  dragState.card.classList.remove('dragging');
 
-  if (dragState.card) dragState.card.classList.remove('dragging-card');
-
-  const cubesRect = cubesArea.getBoundingClientRect();
-  const inCubes   = e.clientX >= cubesRect.left && e.clientX <= cubesRect.right &&
-                    e.clientY >= cubesRect.top  && e.clientY <= cubesRect.bottom;
-
-  if (inCubes) {
-    // Convert drop position to a normalised scene position
-    const relX = ((e.clientX - cubesRect.left)  / cubesRect.width  - 0.5) * 20;
-    const relY = -((e.clientY - cubesRect.top)  / cubesRect.height - 0.5) * 10;
-    addCube(dragState.city, relX, relY);
+  if (dragState.moved) {
+    // If dropped outside the city panel → create floating clock
+    const panel = document.getElementById('city-panel');
+    const r = panel.getBoundingClientRect();
+    const inPanel = e.clientX >= r.left && e.clientX <= r.right &&
+                    e.clientY >= r.top  && e.clientY <= r.bottom;
+    if (!inPanel) {
+      spawnFloatingClock(dragState.city, e.clientX - 77, e.clientY - 45);
+    }
   }
 
   dragState = null;
@@ -205,234 +357,89 @@ function onDragEnd(e) {
   document.removeEventListener('mouseup',   onDragEnd);
 }
 
-// ─── Three.js Cube Scene ─────────────────────────────────────────────────────
-let scene, camera, renderer, raycaster, mouse;
-const cubeObjects = []; // { mesh, city, labelCanvas, labelTexture }
+// ─── Floating Clocks ──────────────────────────────────────────────────────────
+const floatingClocks = [];
 
-function initThree() {
-  const area = document.getElementById('cubes-area');
+function spawnFloatingClock(city, x, y) {
+  // Clamp to viewport
+  x = Math.max(4, Math.min(window.innerWidth  - 160, x));
+  y = Math.max(4, Math.min(window.innerHeight - 110, y));
 
-  scene    = new THREE.Scene();
-  scene.background = new THREE.Color(0x0d1117);
+  const el = document.createElement('div');
+  el.className = 'floating-clock';
+  el.style.left = x + 'px';
+  el.style.top  = y + 'px';
 
-  camera   = new THREE.PerspectiveCamera(50, area.clientWidth / area.clientHeight, 0.1, 100);
-  camera.position.set(0, 0, 18);
+  const timeEl = document.createElement('div');
+  timeEl.className = 'fc-time';
+  timeEl.textContent = getTime(city.tz);
 
-  renderer = new THREE.WebGLRenderer({ canvas: threeCanvas, antialias: true });
-  renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(area.clientWidth, area.clientHeight);
+  const dateEl = document.createElement('div');
+  dateEl.className = 'fc-date';
+  dateEl.textContent = getDate(city.tz);
 
-  // Ambient + directional lights
-  scene.add(new THREE.AmbientLight(0x8888cc, 0.8));
-  const dirLight = new THREE.DirectionalLight(0xffffff, 0.9);
-  dirLight.position.set(5, 8, 10);
-  scene.add(dirLight);
-  const dirLight2 = new THREE.DirectionalLight(0x3399ff, 0.4);
-  dirLight2.position.set(-5, -5, -5);
-  scene.add(dirLight2);
+  const tzEl = document.createElement('div');
+  tzEl.className = 'fc-tz';
+  tzEl.textContent = getShortTz(city.tz);
 
-  // Grid floor
-  const grid = new THREE.GridHelper(40, 30, 0x1c2333, 0x1c2333);
-  grid.position.y = -4;
-  scene.add(grid);
+  el.innerHTML = `
+    <div class="fc-header">
+      <span class="fc-name">${city.name}</span>
+      <button class="fc-close" title="Close">&#215;</button>
+    </div>
+  `;
+  el.appendChild(timeEl);
+  el.appendChild(dateEl);
+  el.appendChild(tzEl);
 
-  raycaster = new THREE.Raycaster();
-  mouse     = new THREE.Vector2();
-
-  window.addEventListener('resize', onResize);
-  threeCanvas.addEventListener('mousemove', onCanvasHover);
-  threeCanvas.addEventListener('click',     onCanvasClick);
-
-  animate();
-}
-
-function onResize() {
-  const area = document.getElementById('cubes-area');
-  camera.aspect = area.clientWidth / area.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(area.clientWidth, area.clientHeight);
-}
-
-// ─── Cube Label Canvas ────────────────────────────────────────────────────────
-function makeLabelCanvas(city) {
-  const W = 512, H = 512;
-  const c = document.createElement('canvas');
-  c.width  = W;
-  c.height = H;
-  const ctx = c.getContext('2d');
-
-  // Background gradient
-  const grad = ctx.createLinearGradient(0, 0, W, H);
-  grad.addColorStop(0, '#1c2e4a');
-  grad.addColorStop(1, '#0d1b30');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  // Border glow
-  ctx.strokeStyle = '#58a6ff';
-  ctx.lineWidth   = 18;
-  ctx.strokeRect(9, 9, W - 18, H - 18);
-
-  ctx.strokeStyle = 'rgba(88,166,255,0.25)';
-  ctx.lineWidth   = 4;
-  ctx.strokeRect(28, 28, W - 56, H - 56);
-
-  // City name
-  ctx.fillStyle = '#e6edf3';
-  ctx.font      = 'bold 52px "Segoe UI", Arial, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.fillText(city.name, W / 2, 200);
-
-  // Timezone
-  ctx.fillStyle = '#7d8590';
-  ctx.font      = '30px "Segoe UI", Arial, sans-serif';
-  ctx.fillText(getShortTz(city.tz), W / 2, 250);
-
-  // Time
-  ctx.fillStyle = '#3fb950';
-  ctx.font      = 'bold 100px "Courier New", monospace';
-  ctx.fillText(getTime(city.tz), W / 2, 370);
-
-  // Date
-  ctx.fillStyle = '#7d8590';
-  ctx.font      = '30px "Segoe UI", Arial, sans-serif';
-  ctx.fillText(getDate(city.tz), W / 2, 430);
-
-  return c;
-}
-
-function updateLabelCanvas(obj) {
-  const ctx = obj.labelCanvas.getContext('2d');
-  const W   = obj.labelCanvas.width;
-  const H   = obj.labelCanvas.height;
-
-  // Clear time area only (optimisation)
-  ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.clearRect(30, 290, W - 60, 160);
-
-  const grad = ctx.createLinearGradient(0, 290, W, 450);
-  grad.addColorStop(0, '#1c2e4a');
-  grad.addColorStop(1, '#0d1b30');
-  ctx.fillStyle = grad;
-  ctx.fillRect(30, 290, W - 60, 160);
-
-  ctx.fillStyle = '#3fb950';
-  ctx.font      = 'bold 100px "Courier New", monospace';
-  ctx.textAlign = 'center';
-  ctx.fillText(getTime(obj.city.tz), W / 2, 370);
-
-  ctx.fillStyle = '#7d8590';
-  ctx.font      = '30px "Segoe UI", Arial, sans-serif';
-  ctx.fillText(getDate(obj.city.tz), W / 2, 430);
-
-  obj.labelTexture.needsUpdate = true;
-}
-
-// ─── Add Cube ─────────────────────────────────────────────────────────────────
-function addCube(city, x, y) {
-  const labelCanvas  = makeLabelCanvas(city);
-  const labelTexture = new THREE.CanvasTexture(labelCanvas);
-
-  // Faces: front/back = label, others = solid tinted
-  const sideMat = new THREE.MeshPhongMaterial({ color: 0x1c2e4a, shininess: 60 });
-  const frontMat = new THREE.MeshPhongMaterial({ map: labelTexture, shininess: 80 });
-
-  const materials = [sideMat, sideMat, sideMat, sideMat, frontMat, frontMat];
-
-  const geo  = new THREE.BoxGeometry(4.5, 4.5, 4.5);
-  const mesh = new THREE.Mesh(geo, materials);
-
-  mesh.position.set(x, y, 0);
-  // subtle random rotation for depth
-  mesh.rotation.y = (Math.random() - 0.5) * 0.3;
-  mesh.rotation.x = (Math.random() - 0.5) * 0.1;
-
-  scene.add(mesh);
-
-  const obj = { mesh, city, labelCanvas, labelTexture };
-  cubeObjects.push(obj);
-  mesh.userData.cubeObj = obj;
-}
-
-// ─── Cube Hover / Click ───────────────────────────────────────────────────────
-const tooltip = document.createElement('div');
-tooltip.id = 'cube-tooltip';
-document.body.appendChild(tooltip);
-
-function onCanvasHover(e) {
-  const rect = threeCanvas.getBoundingClientRect();
-  mouse.x =  ((e.clientX - rect.left)  / rect.width)  * 2 - 1;
-  mouse.y = -((e.clientY - rect.top)   / rect.height)  * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-  const hits = raycaster.intersectObjects(cubeObjects.map(o => o.mesh));
-
-  if (hits.length) {
-    const city = hits[0].object.userData.cubeObj.city;
-    tooltip.textContent = city.name + ' · ' + getShortTz(city.tz) + ' · ' + getTime(city.tz);
-    tooltip.style.left  = (e.clientX + 12) + 'px';
-    tooltip.style.top   = (e.clientY - 30) + 'px';
-    tooltip.classList.add('visible');
-    threeCanvas.style.cursor = 'pointer';
-  } else {
-    tooltip.classList.remove('visible');
-    threeCanvas.style.cursor = 'default';
-  }
-}
-
-function onCanvasClick(e) {
-  const rect = threeCanvas.getBoundingClientRect();
-  mouse.x =  ((e.clientX - rect.left)  / rect.width)  * 2 - 1;
-  mouse.y = -((e.clientY - rect.top)   / rect.height)  * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-  const hits = raycaster.intersectObjects(cubeObjects.map(o => o.mesh));
-  if (!hits.length) return;
-
-  const mesh = hits[0].object;
-  const idx  = cubeObjects.findIndex(o => o.mesh === mesh);
-  if (idx === -1) return;
-
-  // Right-click / double-click to remove, single click spins
-  if (e.detail === 2) {
-    const obj = cubeObjects[idx];
-    scene.remove(obj.mesh);
-    obj.labelTexture.dispose();
-    cubeObjects.splice(idx, 1);
-  }
-}
-
-// ─── Animate ──────────────────────────────────────────────────────────────────
-let lastTick = 0;
-
-function animate(ts = 0) {
-  requestAnimationFrame(animate);
-
-  // Gentle idle rotation for all cubes
-  cubeObjects.forEach(obj => {
-    obj.mesh.rotation.y += 0.003;
+  el.querySelector('.fc-close').addEventListener('click', () => {
+    el.remove();
+    const idx = floatingClocks.findIndex(f => f.el === el);
+    if (idx !== -1) floatingClocks.splice(idx, 1);
   });
 
-  // Update labels every second
-  if (ts - lastTick > 1000) {
-    lastTick = ts;
-    cubeObjects.forEach(obj => updateLabelCanvas(obj));
-  }
+  makeFloatingDraggable(el);
 
-  renderer.render(scene, camera);
+  document.getElementById('floating-clocks').appendChild(el);
+  floatingClocks.push({ city, el, timeEl, dateEl });
+}
+
+function makeFloatingDraggable(el) {
+  const header = el.querySelector('.fc-header');
+
+  header.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('fc-close')) return;
+    e.preventDefault();
+
+    const startX    = e.clientX;
+    const startY    = e.clientY;
+    const startLeft = parseInt(el.style.left) || 0;
+    const startTop  = parseInt(el.style.top)  || 0;
+
+    el.classList.add('dragging-fc');
+
+    function onMove(e) {
+      const nx = startLeft + (e.clientX - startX);
+      const ny = startTop  + (e.clientY - startY);
+      el.style.left = Math.max(0, Math.min(window.innerWidth  - el.offsetWidth,  nx)) + 'px';
+      el.style.top  = Math.max(0, Math.min(window.innerHeight - el.offsetHeight, ny)) + 'px';
+    }
+
+    function onUp() {
+      el.classList.remove('dragging-fc');
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup',   onUp);
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup',   onUp);
+  });
 }
 
 // ─── Bootstrap ────────────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initLocalClock();
-  initMapDots();
-  initCityList();
-  startCityTicker();
-  initThree();
-
-  // Show hint cubes for two demo cities on load
-  setTimeout(() => {
-    addCube(CITIES.find(c => c.name === 'Tokyo'),   -5, 0.5);
-    addCube(CITIES.find(c => c.name === 'London'),   2, 0.5);
-  }, 200);
+  initMap();
+  initCityPanel();
+  startTicker();
 });

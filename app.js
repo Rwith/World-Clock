@@ -80,52 +80,8 @@ function initLocalClock() {
   setInterval(tick, 1000);
 }
 
-// ─── Day / Night Terminator ───────────────────────────────────────────────────
-// Computes the polygon of Earth's nightside using solar declination and
-// the sub-solar longitude for the given UTC time.
-function buildNightPolygon(date) {
-  const d = date || new Date();
-
-  // Approximate solar declination (±23.45°)
-  const start     = new Date(d.getUTCFullYear(), 0, 1);
-  const dayOfYear = Math.round((d - start) / 86400000) + 1;
-  const declDeg   = 23.45 * Math.sin((2 * Math.PI / 365) * (dayOfYear - 81));
-  const decl      = declDeg * Math.PI / 180;
-
-  // Sub-solar longitude: at UTC 12:00 the sun is over the 0° meridian
-  const utcH = d.getUTCHours() + d.getUTCMinutes() / 60 + d.getUTCSeconds() / 3600;
-  let ssl = 180 - utcH * 15;
-  ssl = ((ssl % 360) + 360) % 360;
-  if (ssl > 180) ssl -= 360;
-
-  // Guard against tan(decl) = 0 near equinox
-  const tanDecl = Math.abs(decl) < 1e-6
-    ? (decl >= 0 ? 1e-6 : -1e-6)
-    : Math.tan(decl);
-
-  // Terminator latitude for each longitude
-  const ring = [];
-  for (let lng = -180; lng <= 180; lng++) {
-    const ha  = (lng - ssl) * Math.PI / 180;
-    let lat   = Math.atan(-Math.cos(ha) / tanDecl) * 180 / Math.PI;
-    lat = Math.max(-89.9, Math.min(89.9, lat));
-    ring.push([lat, lng]);
-  }
-
-  // Close polygon at the dark pole
-  if (declDeg >= 0) {
-    // Summer in northern hemisphere → south pole is dark
-    ring.push([-90, 180], [-90, -180]);
-  } else {
-    // Winter in northern hemisphere → north pole is dark
-    ring.push([90, 180], [90, -180]);
-  }
-
-  return ring;
-}
-
 // ─── Leaflet Map ──────────────────────────────────────────────────────────────
-let map, nightLayer;
+let map;
 
 function initMap() {
   map = L.map('map', {
@@ -145,23 +101,6 @@ function initMap() {
     subdomains: 'abcd',
     maxZoom: 19,
   }).addTo(map);
-
-  // Night overlay polygon
-  nightLayer = L.polygon(buildNightPolygon(), {
-    fillColor: '#060e1e',
-    fillOpacity: 0.52,
-    stroke: true,
-    color: '#3a78c9',
-    weight: 1.5,
-    opacity: 0.85,
-    interactive: false,
-    smoothFactor: 3,
-  }).addTo(map);
-
-  // Refresh night overlay every 60 s
-  setInterval(() => {
-    nightLayer.setLatLngs(buildNightPolygon());
-  }, 60000);
 
   addCityMarkers();
 }

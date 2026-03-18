@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 
 // Keep a global reference so windows aren't garbage-collected
@@ -14,7 +14,8 @@ function createMainWindow() {
     height: 860,
     minWidth: 900,
     minHeight: 600,
-    backgroundColor: '#0d1117',
+    backgroundColor: '#0b0f17',
+    autoHideMenuBar: true,
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'default',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -76,6 +77,9 @@ ipcMain.on('close-window', (event) => {
 
 // ─── App Lifecycle ────────────────────────────────────────────────────────────
 app.whenReady().then(() => {
+  // Remove the native menu bar entirely on all platforms
+  Menu.setApplicationMenu(null);
+
   createMainWindow();
 
   app.on('activate', () => {

@@ -35,6 +35,7 @@ const CITIES = [
   { name: 'Tokyo',         tz: 'Asia/Tokyo',                         lat: 35.69,  lng: 139.69  },
   { name: 'Sydney',        tz: 'Australia/Sydney',                   lat: -33.87, lng: 151.21  },
   { name: 'Melbourne',     tz: 'Australia/Melbourne',                lat: -37.81, lng: 144.96  },
+  { name: 'Brisbane',      tz: 'Australia/Brisbane',                 lat: -27.47, lng: 153.03  },
   { name: 'Auckland',      tz: 'Pacific/Auckland',                   lat: -36.86, lng: 174.77  },
   { name: 'Honolulu',      tz: 'Pacific/Honolulu',                   lat: 21.31,  lng: -157.86 },
   { name: 'Anchorage',     tz: 'America/Anchorage',                  lat: 61.22,  lng: -149.90 },
@@ -80,8 +81,84 @@ function initLocalClock() {
   setInterval(tick, 1000);
 }
 
+// ─── Day/Night Terminator (ported from joergdietrich/Leaflet.Terminator) ──────
+// Source algorithm: https://github.com/joergdietrich/Leaflet.Terminator
+const _D2R = Math.PI / 180;
+const _R2D = 180 / Math.PI;
+
+function _julian(date) {
+  return date / 86400000 + 2440587.5;
+}
+
+function _GMST(jd) {
+  return (18.697374558 + 24.06570982441908 * (jd - 2451545.0)) % 24;
+}
+
+function _sunEclipticPosition(jd) {
+  const n      = jd - 2451545.0;
+  const L      = (280.460 + 0.9856474 * n) % 360;
+  const g      = (357.528 + 0.9856003 * n) % 360;
+  const lambda = L + 1.915 * Math.sin(g * _D2R) + 0.02 * Math.sin(2 * g * _D2R);
+  return { lambda };
+}
+
+function _eclipticObliquity(jd) {
+  const T = (jd - 2451545.0) / 36525;
+  return 23.43929111 -
+    T * (46.836769 / 3600
+      - T * (0.0001831 / 3600
+        + T * (0.00200340 / 3600
+          - T * (0.576e-6 / 3600 - T * 4.34e-8 / 3600))));
+}
+
+function _sunEquatorialPosition(lambda, obliq) {
+  let alpha = Math.atan(Math.cos(obliq * _D2R) * Math.tan(lambda * _D2R)) * _R2D;
+  const delta = Math.asin(Math.sin(obliq * _D2R) * Math.sin(lambda * _D2R)) * _R2D;
+  const lQ = Math.floor(lambda / 90) * 90;
+  const rQ = Math.floor(alpha  / 90) * 90;
+  alpha += lQ - rQ;
+  return { alpha, delta };
+}
+
+function _hourAngle(lng, sunPos, gst) {
+  return (gst + lng / 15) * 15 - sunPos.alpha;
+}
+
+function _terminatorLat(ha, sunPos) {
+  return Math.atan(-Math.cos(ha * _D2R) / Math.tan(sunPos.delta * _D2R)) * _R2D;
+}
+
+function buildTerminatorLatLngs(date) {
+  const jd     = _julian(date || new Date());
+  const gst    = _GMST(jd);
+  const eclPos = _sunEclipticPosition(jd);
+  const obliq  = _eclipticObliquity(jd);
+  const sunPos = _sunEquatorialPosition(eclPos.lambda, obliq);
+
+  const lngRange = 720;
+  const res      = 2;           // points per degree
+  const latLng   = [];
+
+  for (let i = 0; i <= lngRange * res; i++) {
+    const lng = -lngRange / 2 + i / res;
+    const ha  = _hourAngle(lng, sunPos, gst);
+    latLng[i + 1] = [_terminatorLat(ha, sunPos), lng];
+  }
+
+  // Close polygon at the unlit pole
+  if (sunPos.delta < 0) {
+    latLng[0]              = [90, -lngRange / 2];
+    latLng[latLng.length]  = [90,  lngRange / 2];
+  } else {
+    latLng[0]              = [-90, -lngRange / 2];
+    latLng[latLng.length]  = [-90,  lngRange / 2];
+  }
+
+  return latLng;
+}
+
 // ─── Leaflet Map ──────────────────────────────────────────────────────────────
-let map;
+let map, terminatorLayer;
 
 function initMap() {
   map = L.map('map', {
@@ -101,6 +178,19 @@ function initMap() {
     subdomains: 'abcd',
     maxZoom: 19,
   }).addTo(map);
+
+  // Day/night terminator overlay
+  terminatorLayer = L.polygon(buildTerminatorLatLngs(), {
+    color:       'rgba(100,140,200,0.45)',
+    weight:      1,
+    fillColor:   '#060d1e',
+    fillOpacity: 0.48,
+    interactive: false,
+    smoothFactor: 4,
+  }).addTo(map);
+
+  // Update once per minute as Earth rotates
+  setInterval(() => terminatorLayer.setLatLngs(buildTerminatorLatLngs()), 60000);
 
   addCityMarkers();
 }
